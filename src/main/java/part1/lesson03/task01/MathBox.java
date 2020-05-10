@@ -1,7 +1,7 @@
 package part1.lesson03.task01;
 
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import part1.lesson03.task02.ObjectBox;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -16,17 +16,14 @@ import java.util.concurrent.atomic.AtomicReference;
  * и хранение объектов этого класса в коллекциях (например, hashMap). Выполнение контракта обязательно!
  * Создать метод, который получает на вход Integer и если такое значение есть в коллекции, удаляет его.
  */
-@ToString
 @EqualsAndHashCode
-public class MathBox {
-
-    private List<Number> numbers;
+public class MathBox extends ObjectBox {
 
     public MathBox(Number[] numbers) {
+        super(numbers);
         Set<Number> numberSet = new HashSet<>(Arrays.asList(numbers));
         if (numbers.length != numberSet.size())
             throw new IllegalArgumentException("Array must have only unique elements!");
-        this.numbers = new ArrayList<>(numberSet);
     }
 
     /**
@@ -34,7 +31,7 @@ public class MathBox {
      */
     public Double summator() {
         AtomicReference<Double> n = new AtomicReference<>(0d);
-        numbers.stream().forEach(nv -> n.updateAndGet(v -> v + nv.doubleValue()));
+        collection.stream().forEach(nv -> n.updateAndGet(v -> v + ((Number) nv).doubleValue()));
         return n.get();
     }
 
@@ -42,22 +39,42 @@ public class MathBox {
      * splitter, выполняющий поочередное деление всех хранящихся в объекте элементов на делитель, являющийся аргументом метода.
      */
     public void splitter(Number divider) {
-        int size = numbers.size();
+        int size = collection.size();
         for (int i = 0; i < size; i++) {
-            double divideResult = numbers.get(i).doubleValue() / divider.doubleValue();
-            numbers.set(i, divideResult);
+            double divideResult = ((Number) collection.get(i)).doubleValue() / divider.doubleValue();
+            if ((int) divideResult == divideResult &&
+                    ((Number) collection.get(i)).doubleValue() == (int) (((Number) collection.get(i)).doubleValue()) &&
+                    divider.doubleValue() == (int) divider.doubleValue())
+                collection.set(i, (int) divideResult);
+            collection.set(i, divideResult);
         }
     }
 
     /**
      * Remove existing value
+     *
      * @param var
      */
     public void removeIntegerIfExist(Integer var) {
-        Iterator<Number> iterator = numbers.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().doubleValue() == var)
-                iterator.remove();
+        deleteObject((double) var);
+    }
+
+    @Override
+    public void addObject(Object object) {
+        if (!(object instanceof Number))
+            throw new IllegalArgumentException();
+        boolean isContain = collection.stream().anyMatch(o -> ((Number) o).doubleValue() == ((Number) object).doubleValue());
+        if (!isContain)
+            collection.add(object);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("MathBox : ");
+        for (Object o : collection) {
+            stringBuilder.append(o + "; ");
         }
+        return stringBuilder.toString();
     }
 }
