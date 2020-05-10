@@ -1,6 +1,7 @@
 package part1.lesson05.task01;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Разработать программу – картотеку домашних животных.
@@ -17,12 +18,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        List<Animal> animals = AnimalCreator.getAnimals(100, 200);
+        long start = System.currentTimeMillis();
+        Set<Animal> animals = AnimalCreator.getAnimals(100, 200);
+        System.out.println("End after " + (System.currentTimeMillis() - start) + " ms.");
 
+        start = System.currentTimeMillis();
         AnimalDB animalDB = new AnimalDB(animals);
         Animal a = animalDB.getAnimalByName("Jack");
         animalDB.setNewInfoById(a.getId(), "TUUUU", a.getOwner(), 200);
         System.out.println(animalDB.toString());
+
+        System.out.println("End after " + (System.currentTimeMillis() - start) + " ms.");
     }
 
 }

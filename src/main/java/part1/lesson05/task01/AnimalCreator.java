@@ -1,16 +1,14 @@
 package part1.lesson05.task01;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class AnimalCreator {
     private final static String[] personNames = new String[]{"Jack", "Geck", "Julia", "Afrodita", "Elizaveta", "Nick"};
     private final static String[] animalNames = new String[]{"Jack", "Geck", "Julia", "Afrodita", "Elizaveta", "Nick"};
 
-    public static List<Animal> getAnimals(int personCount, int animalCount) {
-        List<Person> personList = new ArrayList<>(personCount);
-        List<Animal> animalList = new ArrayList<>(animalCount);
+    public static Set<Animal> getAnimals(int personCount, int animalCount) {
+        List<Person> personList = new ArrayList<>();
+        Set<Animal> animalList = new TreeSet<>(new AnimalComparator());
 
         for (int i = 0; i < personCount; i++) {
             Person person = Person.builder()
