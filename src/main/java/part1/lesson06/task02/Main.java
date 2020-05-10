@@ -17,7 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
         FileWriteManager manager = new FileWriteManager();
-        manager.getFiles("C:/Users/Admin/Desktop/test", 4, 100000, new String[]{"sdfdf", "sdfdf", "sdfdf", "sdfdf", "sdfdf", "sdfdf", "sdfdf", "sdfdf"},50);
+        String[] words = WordsMaker.makeWords(1000);
+        manager.getFiles("C:/Users/Admin/Desktop/test", 4, 4000, words, 50);
     }
 
 }

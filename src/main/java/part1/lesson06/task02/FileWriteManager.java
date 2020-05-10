@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -23,30 +21,38 @@ import java.util.*;
  */
 public class FileWriteManager {
 
-    private static final String letters = "abcdefghijklmnopqrstuvwxyz";
     private static final char[] endLine = new char[]{'.', '|', '!', '|', '?', ' '};
 
     public void getFiles(String path, int n, int size, String[] words, int probability) {
 
         List<String> sequences = makeSentences(words, probability);
-        List<String> sequencesPool = makeSequencesPool(sequences);
+        sequences.stream().forEach(c -> System.out.println(c));
 
+        List<String> sequencesPool = makeSequencesPool(sequences);
+        System.out.println("-----------");
+        sequencesPool.stream().forEach(c -> System.out.println(c));
         writeTestToFiles(path, n, size, sequencesPool);
     }
 
-    private void writeTestToFiles(String path, int n, int size, List<String> sequencesPool) {
 
+    private void writeTestToFiles(String path, int n, int size, List<String> sequencesPool) {
+        Iterator<String> iterator = sequencesPool.iterator();
+        String bufferForNextFile = null;
         for (int i = 0; i < n; i++) {
             File file = new File(path + "/" + i + ".txt");
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-
-                Iterator<String> iterator = sequencesPool.iterator();
+                long poolSize = 0;
                 while (iterator.hasNext()) {
-                    String sequence = iterator.next();
-                    if (file.length() + sequence.chars().count() < size) {
+                    String sequence = bufferForNextFile == null ? iterator.next() : bufferForNextFile;
+                    bufferForNextFile = null;
+                    long sizeInSequence = sequence.chars().count();
+                    if (poolSize + sizeInSequence <= size) {
+                        poolSize += sizeInSequence;
                         writer.write(sequence);
-                    } else
+                    } else {
+                        bufferForNextFile = sequence;
                         break;
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -59,7 +65,7 @@ public class FileWriteManager {
         ListIterator<String> iterator = sequences.listIterator();
         StringBuilder sequencesPool = new StringBuilder();
 
-        int wordCounterInSequence = 0;
+        int wordCounterInSequence = (int) (Math.random() * 20) + 1;
         while (iterator.hasNext()) {
             if (wordCounterInSequence == 0) {
                 wordCounterInSequence = (int) (Math.random() * 20) + 1;
@@ -68,6 +74,9 @@ public class FileWriteManager {
                 sequencesPool = new StringBuilder();
             }
             sequencesPool.append(iterator.next());
+            if (iterator.hasNext())
+                sequencesPool.append(" ");
+            wordCounterInSequence--;
         }
         sequencesPool.append("\n\r");
         stringList.add(sequencesPool.toString());
@@ -82,12 +91,17 @@ public class FileWriteManager {
         ListIterator<String> iterator = stringList.listIterator();
 
         int wordCounterInSequence = 0;
+        boolean firstWord = true;
         while (iterator.hasNext() || iterator.hasPrevious()) {
             if (wordCounterInSequence == 0) {
                 wordCounterInSequence = (int) (Math.random() * 15) + 1;
             }
-            String word = iterator.hasNext() ? iterator.next() : iterator.previous();
             if (Math.random() <= 1.0 / probability) {
+                String word = iterator.hasNext() ? iterator.next() : iterator.previous();
+                if (firstWord) {
+                    word = Character.toUpperCase(word.charAt(0)) + word.substring(1);
+                    firstWord = false;
+                }
                 sequence.append(word);
                 iterator.remove();
                 wordCounterInSequence--;
@@ -95,9 +109,15 @@ public class FileWriteManager {
                     sequence.append(endLine[(int) (Math.random() * endLine.length)]);
                     listSequences.add(sequence.toString());
                     sequence = new StringBuilder();
+                    firstWord = true;
+
                     continue;
                 }
-                sequence.append(" ");
+                if (iterator.hasNext() || iterator.hasPrevious()) {
+                    if (Math.random() < 0.5)
+                        sequence.append(",");
+                    sequence.append(" ");
+                }
             }
         }
         sequence.append(endLine[(int) (Math.random() * endLine.length)]);
