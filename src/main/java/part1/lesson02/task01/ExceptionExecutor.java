@@ -12,6 +12,7 @@ public class ExceptionExecutor {
     public static void main(String[] args) {
 
         ExceptionScenariosHandler.nullPointerExceptionCase(null);
-
+//        ExceptionScenariosHandler.arrayIndexOutOfBoundsExceptionCase();
+//        ExceptionScenariosHandler.throwExceptionCase("Hello, World");
     }
 }
