@@ -1,23 +1,39 @@
 package part1.lesson06.task01;
 
-import java.util.TreeSet;
+import part1.lesson06.task01.service.FactorialService;
+import part1.lesson06.task01.service.FourThreadFactorialService;
+import part1.lesson06.task01.service.OneThreadFactorialService;
+
+import java.math.BigInteger;
+import java.util.Map;
 
 /**
- * Задание 1. Написать программу, читающую текстовый файл.
- * Программа должна составлять отсортированный по алфавиту список слов, найденных в файле и сохранять его в файл-результат.
- * Найденные слова не должны повторяться, регистр не должен учитываться. Одно слово в разных падежах – это разные слова.
+ * Дан массив случайных чисел. Написать программу для вычисления факториалов всех элементов массива. Использовать пул потоков для решения задачи.
+ * <p>
+ * Особенности выполнения:
+ * <p>
+ * Для данного примера использовать рекурсию - не очень хороший вариант, т.к. происходит большое выделение памяти, очень вероятен StackOverFlow.
+ * Лучше перемножать числа в простом цикле при этом создавать объект типа BigInteger
+ * По сути, есть несколько способа решения задания:
+ * <p>
+ * 1) распараллеливать вычисление факториала для одного числа
+ * 2) распараллеливать вычисления для разных чисел
+ * 3) комбинированный
+ * При чем вычислив факториал для одного числа, можно запомнить эти данные и использовать их для вычисления другого, что будет гораздо быстрее
  */
 public class Main {
 
     public static void main(String[] args) {
+        Integer[] numbers = NumberCreator.createNumbers(100);
 
-        String fileSource = "C:/Users/Admin/Desktop/source.txt";
-        String fileDestination = "C:/Users/Admin/Desktop/destination.txt";
-        FileReadService service = new FileReadService(fileSource, fileDestination);
-        TreeSet<String> words = service.readWords();
+        long start = System.currentTimeMillis();
+        FactorialService factorialService = new FourThreadFactorialService();
+        Map<Integer, BigInteger> factorials = factorialService.findFactorials(numbers);
 
-        service.writeWords(words);
-
+        for(Map.Entry<Integer, BigInteger> entry : factorials.entrySet()){
+            System.out.println(entry.getKey() + " - " + entry.getValue());
+        }
+        System.out.println("Time execution = " + (System.currentTimeMillis() - start));
     }
 
 }
