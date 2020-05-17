@@ -10,9 +10,9 @@ import java.io.*;
 public class SomeClassBuilder {
 
     public static final String sourceClass = "src\\main\\java\\part1\\lesson09\\task01\\SomeClass.java";
-    public static final String targetClass = "SomeClass.java";
+    public static final String targetClass = "target\\classes\\part1\\lesson09\\task01\\SomeClass.java";
 
-    public static void buildSomeClassWithMethod(String methodCode) {
+    public static String buildSomeClassWithMethod(String methodCode) {
 
         try {
             BufferedReader fileReader = new BufferedReader(new FileReader(sourceClass));
@@ -37,7 +37,7 @@ public class SomeClassBuilder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return targetClass;
     }
 
 }

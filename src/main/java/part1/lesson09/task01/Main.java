@@ -20,8 +20,22 @@ public class Main {
     public static void main(String[] args) {
 
         String methodCode = ConsoleMethodReader.readFromConsole();
+        String file = SomeClassBuilder.buildSomeClassWithMethod(methodCode);
+        SomeClassCompiler.compileClass(file);
+        CustomJavaClassLoader classLoader = new CustomJavaClassLoader();
 
-        SomeClassBuilder.buildSomeClassWithMethod(methodCode);
+        try {
+            Class sc = classLoader.loadClass("SomeClass");
+            Worker newRealization = (Worker) sc.newInstance();
+            newRealization.doWork();
+//            System.out.println("Ok, i do!");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 }
