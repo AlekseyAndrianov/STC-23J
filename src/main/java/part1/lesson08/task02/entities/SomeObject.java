@@ -1,4 +1,4 @@
-package part1.lesson08.task01.entities;
+package part1.lesson08.task02.entities;
 
 import lombok.Builder;
 import lombok.Data;
