@@ -1,5 +1,6 @@
 package part1.lesson06.task01;
 
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -14,7 +15,7 @@ public class Main {
         String fileSource = "C:/Users/Admin/Desktop/source.txt";
         String fileDestination = "C:/Users/Admin/Desktop/destination.txt";
         FileReadService service = new FileReadService(fileSource, fileDestination);
-        TreeSet<String> words = service.readWords();
+        Set<String> words = service.readWords();
 
         service.writeWords(words);
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -16,8 +17,8 @@ public class FileReadService {
     private String fileSource;
     private String fileDestination;
 
-    public TreeSet<String> readWords() {
-        TreeSet<String> wordsSet = new TreeSet<>();
+    public Set<String> readWords() {
+        Set<String> wordsSet = new TreeSet<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSource))) {
 
             String line;
@@ -35,7 +36,7 @@ public class FileReadService {
         return wordsSet;
     }
 
-    public void writeWords(TreeSet<String> words) {
+    public void writeWords(Set<String> words) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileDestination))) {
             words.stream().forEach(w -> {
                 try {
