@@ -1,6 +1,6 @@
 package part1.lesson06.task01;
 
-import java.util.TreeSet;
+import java.util.Set;
 
 /**
  * Задание 1. Написать программу, читающую текстовый файл.
@@ -14,7 +14,7 @@ public class Main {
         String fileSource = "C:/Users/Admin/Desktop/source.txt";
         String fileDestination = "C:/Users/Admin/Desktop/destination.txt";
         FileReadService service = new FileReadService(fileSource, fileDestination);
-        TreeSet<String> words = service.readWords();
+        Set<String> words = service.readWords();
 
         service.writeWords(words);
 
