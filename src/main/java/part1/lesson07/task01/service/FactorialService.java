@@ -1,4 +1,4 @@
-package part1.lesson06.task01.service;
+package part1.lesson07.task01.service;
 
 import java.math.BigInteger;
 import java.util.Map;

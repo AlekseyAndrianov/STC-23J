@@ -1,4 +1,4 @@
-package part1.lesson06.task01;
+package part1.lesson07.task01;
 
 public class NumberCreator {
     public static Integer[] createNumbers(int size) {
