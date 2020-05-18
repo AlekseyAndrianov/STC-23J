@@ -44,14 +44,14 @@ public class FourThreadFactorialService implements FactorialService {
 
         int[] firstIndex = new int[]{
                 firstValue,
-                (int) (firstValue + (number - firstValue) / 4.0),
-                (int) (firstValue + (number - firstValue) / 2.0),
-                (int) (firstValue + (number - firstValue) / 4.0 * 3)};
+                Math.round((float) (firstValue + (number - firstValue) / 4.0)),
+                Math.round((float) (firstValue + (number - firstValue) / 2.0)),
+                Math.round((float) (firstValue + (number - firstValue) / 4.0 * 3))};
 
         int[] lastIndex = new int[]{
-                (int) (firstValue + (number - firstValue) / 4.0),
-                (int) (firstValue + (number - firstValue) / 2.0),
-                (int) (firstValue + (number - firstValue) / 4.0 * 3),
+                Math.round((float) (firstValue + (number - firstValue) / 4.0)),
+                Math.round((float) (firstValue + (number - firstValue) / 2.0)),
+                Math.round((float) (firstValue + (number - firstValue) / 4.0 * 3)),
                 number};
         List<Future<BigInteger>> futures = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {

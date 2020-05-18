@@ -1,10 +1,8 @@
 package part1.lesson07.task01;
 
-import part1.lesson07.task01.service.FactorialService;
 import part1.lesson07.task01.service.FourThreadFactorialService;
-
-import java.math.BigInteger;
-import java.util.Map;
+import part1.lesson07.task01.service.TreeMapFactorialService;
+import part1.lesson07.task01.service.HashMapFactorialService;
 
 /**
  * Дан массив случайных чисел. Написать программу для вычисления факториалов всех элементов массива. Использовать пул потоков для решения задачи.
@@ -23,16 +21,21 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-        Integer[] numbers = NumberCreator.createNumbers(100);
 
-        long start = System.currentTimeMillis();
-        FactorialService factorialService = new FourThreadFactorialService();
-        Map<Integer, BigInteger> factorials = factorialService.findFactorials(numbers);
+        try {
+            String result1 = FactorialServiceExecutor.getAverageExecutionTime(10, TreeMapFactorialService.class);
+            String result2 = FactorialServiceExecutor.getAverageExecutionTime(10, HashMapFactorialService.class);
+            String result3 = FactorialServiceExecutor.getAverageExecutionTime(10, FourThreadFactorialService.class);
 
-        for(Map.Entry<Integer, BigInteger> entry : factorials.entrySet()){
-            System.out.println(entry.getKey() + " - " + entry.getValue());
+            System.out.println(result1);
+            System.out.println(result2);
+            System.out.println(result3);
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-        System.out.println("Time execution = " + (System.currentTimeMillis() - start));
     }
 
 }

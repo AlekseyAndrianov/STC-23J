@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @ToString
-public class OneThreadFactorialService implements FactorialService {
+public class TreeMapFactorialService implements FactorialService {
     private Map<Integer, BigInteger> mapResult;
 
-    public OneThreadFactorialService() {
+    public TreeMapFactorialService() {
         this.mapResult = new TreeMap<>();
     }
 
