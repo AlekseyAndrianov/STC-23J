@@ -14,7 +14,7 @@ import part1.lesson08.task01.service.ObjectSerializer;
  */
 public class Main {
 
-    private static final String file = "C:\\Users\\Admin\\Desktop\\destination.txt";
+    private static final String file = "D:\\destination.txt";
 
     public static void main(String[] args) {
 
@@ -27,10 +27,10 @@ public class Main {
 
         ObjectSerializer objectSerializer = new ObjectSerializer();
         objectSerializer.serialize(someObject, file);
-        System.out.println("someObject: " + someObject);
-
-        SomeObject deSerializedObject = (SomeObject) objectSerializer.deSerialize(file);
-        System.out.println("deSerializedObject: " + deSerializedObject);
+//        System.out.println("someObject: " + someObject);
+//
+//        SomeObject deSerializedObject = (SomeObject) objectSerializer.deSerialize(file);
+//        System.out.println("deSerializedObject: " + deSerializedObject);
     }
 
 }
