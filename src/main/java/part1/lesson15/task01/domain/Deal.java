@@ -11,4 +11,5 @@ public class Deal {
     private Customer customer;
     private Product product;
     private Shop shop;
+
 }

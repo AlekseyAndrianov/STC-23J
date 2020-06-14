@@ -24,7 +24,7 @@ public class DealRepository {
     public void create(Deal deal) {
         String query = "INSERT INTO deal (customer, product, shop) VALUES (?, ?, ?)";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, deal.getCustomer().getId());
@@ -39,13 +39,12 @@ public class DealRepository {
 
     public Deal get(Customer customer) {
         String query = "SELECT * FROM deal WHERE customer=?";
-        ResultSet resultSet = null;
         Deal deal = null;
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, customer.getId());
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             resultSet.next();
 
             deal = Deal.builder()
@@ -62,7 +61,7 @@ public class DealRepository {
     public void update(Deal deal) {
         String query = "UPDATE deal SET customer=?, product=?, shop=? where id=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, deal.getCustomer().getId());
@@ -79,7 +78,7 @@ public class DealRepository {
     public void delete(Deal deal) {
         String query = "DELETE FROM deal where id=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, deal.getId());
@@ -94,7 +93,7 @@ public class DealRepository {
         String query = "SELECT * FROM deal";
         List<Deal> deals = new ArrayList<>();
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery(query);

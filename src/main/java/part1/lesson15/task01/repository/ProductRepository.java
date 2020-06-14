@@ -17,7 +17,7 @@ public class ProductRepository {
     public void create(Product product) {
         String query = "INSERT INTO product (article, price, type, shop) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, product.getArticle());
@@ -34,7 +34,7 @@ public class ProductRepository {
     public void createAll(List<Product> products) {
         String query = "INSERT INTO product (article, price, type, shop) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             for (Product product : products) {
@@ -56,7 +56,7 @@ public class ProductRepository {
         String query = "SELECT * FROM product WHERE article=?";
 
         Product product = null;
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, article);
@@ -77,7 +77,7 @@ public class ProductRepository {
     public void update(Product product) {
         String query = "UPDATE product SET price=?, type=? where article=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setDouble(1, product.getPrice());
@@ -93,7 +93,7 @@ public class ProductRepository {
     public void update(Product product, Shop shop) {
         String query = "UPDATE product SET price=?, type=?, shop=? where article=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setDouble(1, product.getPrice());
@@ -110,7 +110,7 @@ public class ProductRepository {
     public void delete(Product product) {
         String query = "DELETE FROM product where article=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, product.getArticle());

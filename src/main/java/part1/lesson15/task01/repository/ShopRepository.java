@@ -15,7 +15,7 @@ public class ShopRepository {
     public void create(Shop shop) {
         String query = "INSERT INTO shop (id, city, address) VALUES (?, ?, ?)";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, shop.getId());
@@ -32,7 +32,7 @@ public class ShopRepository {
         String query = "SELECT * FROM shop WHERE id=?";
         Shop shop = null;
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);
@@ -54,7 +54,7 @@ public class ShopRepository {
     public void update(Shop shop) {
         String query = "UPDATE shop SET city=?, address=? where id=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, shop.getCity());
@@ -69,7 +69,7 @@ public class ShopRepository {
     public void delete(Shop shop) {
         String query = "DELETE FROM shop where id=?";
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, shop.getId());
@@ -84,7 +84,7 @@ public class ShopRepository {
         String query = "SELECT * FROM shop LIMIT 1";
         Shop shop = null;
 
-        try (Connection connection = Utils.getConnection();
+        try (Connection connection = ConnectionFactory.getConnection();
              Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery(query);

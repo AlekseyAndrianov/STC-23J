@@ -1,5 +1,6 @@
 package part1.lesson15.task01;
 
+import lombok.extern.log4j.Log4j2;
 import part1.lesson15.task01.domain.Customer;
 import part1.lesson15.task01.domain.Deal;
 import part1.lesson15.task01.domain.Product;
@@ -13,6 +14,7 @@ import part1.lesson15.task01.service.ShopService;
 import java.util.List;
 import java.util.UUID;
 
+@Log4j2
 public class Main {
 
     private static final ShopService shopService = new ShopService();
@@ -27,7 +29,11 @@ public class Main {
         ProductRepository productRepository = new ProductRepository();
 
         Shop shop = shopRepository.getDistinct();
+        log.info("Fetch shop from repository with id: " + shop.getId());
+
         Customer customer = customerRepository.getDistinct();
+        log.info("Fetch customer from repository with id: " + customer.getId());
+
         Product product = Product.builder()
                 .article(productID)
                 .type("New Type")
@@ -35,11 +41,14 @@ public class Main {
                 .shop(shop)
                 .build();
         productRepository.create(product);
+        log.info("Push new product to the repository with article: " + product.getArticle());
 
         shopService.makeDeal(product, customer);
+        log.debug("Make deal for product and customer");
+
         List<Deal> deals = shopService.getAllDealsInfo();
 
-        deals.stream().forEach(System.out::println);
+        deals.forEach(log::info);
 
     }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %c{1}:%L - %m%n"/>
+        </Console>
+        <RollingFile name="InfoFileAppender" fileName="logs/app-info.log"
+                     filePattern="logs/app-info-%d{ss-MM-dd-yyyy}.log"
+                     immediateFlush="false" append="true">
+            <LevelRangeFilter minLevel="info" maxLevel="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %c{1}:%L - %m%n"/>
+            <DefaultRolloverStrategy max="50"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="2"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="DebugFileAppender" fileName="logs/app-debug.log"
+                     filePattern="logs/app-debug-%d{ss-MM-dd-yyyy}.log"
+                     immediateFlush="false" append="true">
+            <LevelRangeFilter minLevel="debug" maxLevel="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %c{1}:%L - %m%n"/>
+            <DefaultRolloverStrategy max="50"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="2"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="TraceFileAppender" fileName="logs/app-security.log"
+                     filePattern="logs/app-security-%d{ss-MM-dd-yyyy}.log"
+                     immediateFlush="false" append="true">
+            <LevelRangeFilter minLevel="trace" maxLevel="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %c{1}:%L - %m%n"/>
+            <DefaultRolloverStrategy max="50"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="2"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+        <JDBC name="JDBCAppender" tableName="APP_LOGS">
+            <ConnectionFactory class="part1.lesson15.task01.repository.ConnectionFactory" method="getConnection"/>
+            <Column name="LOG_ID" pattern="%u" isUnicode="false"/>
+            <Column name="ENTRY_DATE" isEventTimestamp="true" isUnicode="false"/>
+            <Column name="LOGGER" pattern="%logger" isUnicode="false"/>
+            <Column name="LOG_LEVEL" pattern="%level" isUnicode="false"/>
+            <Column name="MESSAGE" pattern="%m" isUnicode="false"/>
+            <Column name="EXCEPTION" pattern="%throwable " isUnicode="false"/>
+        </JDBC>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+        <Logger name="part1.lesson15.task01" additivity="false">
+            <AppenderRef ref="InfoFileAppender"/>
+            <AppenderRef ref="DebugFileAppender"/>
+            <AppenderRef ref="TraceFileAppender"/>
+            <AppenderRef ref="JDBCAppender"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+    </Loggers>
+</Configuration>
