@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *  private Long id;
- *  private Customer customer;
- *  private Product product;
- *  private Shop shop;
+ * private Long id;
+ * private Customer customer;
+ * private Product product;
+ * private Shop shop;
  */
 public class DealRepository {
 
@@ -99,7 +99,7 @@ public class DealRepository {
 
             ResultSet resultSet = statement.executeQuery(query);
             Deal deal;
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 deal = Deal.builder()
                         .id(resultSet.getLong(1))
                         .customer(customerRepository.get(resultSet.getLong(2)))

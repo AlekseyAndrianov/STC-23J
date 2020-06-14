@@ -6,7 +6,6 @@ import part1.lesson15.task01.domain.Product;
 import part1.lesson15.task01.repository.DealRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ShopService {
 

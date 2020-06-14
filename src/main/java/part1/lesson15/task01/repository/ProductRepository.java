@@ -13,6 +13,7 @@ import java.util.UUID;
 public class ProductRepository {
 
     private final ShopRepository shopRepository = new ShopRepository();
+
     public void create(Product product) {
         String query = "INSERT INTO product (article, price, type, shop) VALUES (?, ?, ?, ?)";
 

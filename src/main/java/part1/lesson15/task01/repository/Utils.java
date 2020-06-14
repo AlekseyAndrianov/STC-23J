@@ -55,7 +55,7 @@ public class Utils {
                 statement.execute(createShopTable);
                 if (isTest)
                     throw new SQLException();
-            } catch (SQLException ex){
+            } catch (SQLException ex) {
                 ex.printStackTrace();
                 connection.rollback(savepoint);
                 statement.execute(createCustomerTable);

@@ -1,6 +1,5 @@
 package part1.lesson15.task01.repository;
 
-import part1.lesson15.task01.domain.Customer;
 import part1.lesson15.task01.domain.Shop;
 
 import java.sql.*;
@@ -8,8 +7,8 @@ import java.util.UUID;
 
 /**
  * private UUID id;
- *     private String city;
- *     private String address;
+ * private String city;
+ * private String address;
  */
 public class ShopRepository {
 
@@ -41,7 +40,7 @@ public class ShopRepository {
             resultSet.next();
 
             shop = Shop.builder()
-                    .id((UUID)id)
+                    .id((UUID) id)
                     .address(resultSet.getString("address"))
                     .city(resultSet.getString("city"))
                     .build();

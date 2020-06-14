@@ -3,8 +3,6 @@ package part1.lesson15.task01.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
 public class Customer {

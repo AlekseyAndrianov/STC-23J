@@ -8,11 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *  private long id;
- *     private String fName;
- *     private String lName;
- *     private String phoneNumber;
- *     private String eMail;
+ * private long id;
+ * private String fName;
+ * private String lName;
+ * private String phoneNumber;
+ * private String eMail;
  */
 public class CustomerRepository {
 
