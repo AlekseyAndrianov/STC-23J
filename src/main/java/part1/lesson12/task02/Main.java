@@ -1,5 +1,6 @@
 package part1.lesson12.task02;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +13,18 @@ public class Main {
 
 
     public static void main(String[] args) {
-
-        List<Class> list = new ArrayList<>();
+        List<Class[]> list = new ArrayList<>();
         for (int i = 0; i < Integer.MAX_VALUE; i++) {
-            Class clazz = list.getClass();
-            if (i > 0 && i % 500 == 0) {
+
+            Class[] arr = new Class[10_000_000];
+            for (int j = 0; j < 10_000_000; j++) {
+                ClassLoader cl = new CustomClassLoader();
+                arr[j] = Proxy.getProxyClass(cl, Main.class.getInterfaces());
+            }
+            list.add(arr);
+            System.out.println(list.size());
+            if ((i) % 100 == 0)
                 list.remove(0);
-                list.add(0, clazz);
-            } else
-                list.add(clazz);
         }
     }
 }
