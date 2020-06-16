@@ -12,17 +12,17 @@ public class ConnectionFactory {
 
     private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
     private static BasicDataSource dataSource;
+    private static String host;
+    private static String user;
 
-    private ConnectionFactory() {
-    }
-    public static Connection getConnection() throws SQLException {
+    static {
         try {
             Class.forName(resourceBundle.getString("db.driver"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String host = resourceBundle.getString("db.host");
-        String user = resourceBundle.getString("db.user");
+        host = resourceBundle.getString("db.host");
+        user = resourceBundle.getString("db.user");
         if (dataSource == null) {
             dataSource = new BasicDataSource();
             dataSource.setUrl(host);
@@ -30,6 +30,16 @@ public class ConnectionFactory {
             dataSource.setUsername(user);
             dataSource.setPassword(resourceBundle.getString("db.password"));
         }
+    }
+    public Connection getConnection() throws SQLException {
+
+        log.trace(String.format("User '%s' connected to db '%s'", user, host));
+        return dataSource.getConnection();
+    }
+
+
+    public static Connection getConnectionLog() throws SQLException {
+
         log.trace(String.format("User '%s' connected to db '%s'", user, host));
         return dataSource.getConnection();
     }

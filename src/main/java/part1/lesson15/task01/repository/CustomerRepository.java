@@ -16,12 +16,17 @@ import java.sql.SQLException;
  */
 public class CustomerRepository {
 
+    private ConnectionFactory connectionFactory;
+
+    public CustomerRepository(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
     public void create(Customer customer) {
         String query = "INSERT INTO customer (fName, lName, phoneNumber, eMail) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-
             statement.setString(1, customer.getFName());
             statement.setString(2, customer.getLName());
             statement.setString(3, customer.getPhoneNumber());
@@ -36,7 +41,7 @@ public class CustomerRepository {
     public Customer get(long id) {
         String query = "SELECT * FROM customer WHERE id=?";
         Customer customer = null;
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, id);
@@ -61,7 +66,7 @@ public class CustomerRepository {
     public void update(Customer customer) {
         String query = "UPDATE customer SET fName=?, lName=?, eMail=?, phoneNumber=? where id=?";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, customer.getFName());
@@ -79,7 +84,7 @@ public class CustomerRepository {
     public void delete(Customer customer) {
         String query = "DELETE FROM customer where id=?";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, customer.getId());
@@ -93,7 +98,7 @@ public class CustomerRepository {
     public Customer getDistinct() {
         String query = "SELECT * FROM customer LIMIT 1";
         Customer customer = null;
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             ResultSet resultSet = statement.executeQuery();

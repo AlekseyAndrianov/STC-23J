@@ -38,7 +38,7 @@
             </Policies>
         </RollingFile>
         <JDBC name="JDBCAppender" tableName="APP_LOGS">
-            <ConnectionFactory class="part1.lesson15.task01.repository.ConnectionFactory" method="getConnection"/>
+            <ConnectionFactory class="part1.lesson15.task01.repository.ConnectionFactory" method="getConnectionLog"/>
             <Column name="LOG_ID" pattern="%u" isUnicode="false"/>
             <Column name="ENTRY_DATE" isEventTimestamp="true" isUnicode="false"/>
             <Column name="LOGGER" pattern="%logger" isUnicode="false"/>

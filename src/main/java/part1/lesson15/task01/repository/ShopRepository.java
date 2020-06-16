@@ -11,11 +11,16 @@ import java.util.UUID;
  * private String address;
  */
 public class ShopRepository {
+    private ConnectionFactory connectionFactory;
+
+    public ShopRepository(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     public void create(Shop shop) {
         String query = "INSERT INTO shop (id, city, address) VALUES (?, ?, ?)";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, shop.getId());
@@ -32,7 +37,7 @@ public class ShopRepository {
         String query = "SELECT * FROM shop WHERE id=?";
         Shop shop = null;
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);
@@ -50,41 +55,41 @@ public class ShopRepository {
         }
         return shop;
     }
-
-    public void update(Shop shop) {
-        String query = "UPDATE shop SET city=?, address=? where id=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setString(1, shop.getCity());
-            statement.setString(2, shop.getAddress());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void delete(Shop shop) {
-        String query = "DELETE FROM shop where id=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setObject(1, shop.getId());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    public void update(Shop shop) {
+//        String query = "UPDATE shop SET city=?, address=? where id=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setString(1, shop.getCity());
+//            statement.setString(2, shop.getAddress());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void delete(Shop shop) {
+//        String query = "DELETE FROM shop where id=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setObject(1, shop.getId());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public Shop getDistinct() {
         String query = "SELECT * FROM shop LIMIT 1";
         Shop shop = null;
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery(query);

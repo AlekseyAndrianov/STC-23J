@@ -16,15 +16,22 @@ import java.util.UUID;
  */
 public class DealRepository {
 
-    private CustomerRepository customerRepository = new CustomerRepository();
-    private ProductRepository productRepository = new ProductRepository();
-    private ShopRepository shopRepository = new ShopRepository();
+    private ProductRepository productRepository;
+    private ShopRepository shopRepository;
+    private ConnectionFactory connectionFactory;
+    private CustomerRepository customerRepository;
 
+    public DealRepository(ProductRepository productRepository, ShopRepository shopRepository, ConnectionFactory connectionFactory, CustomerRepository customerRepository) {
+        this.productRepository = productRepository;
+        this.shopRepository = shopRepository;
+        this.connectionFactory = connectionFactory;
+        this.customerRepository = customerRepository;
+    }
 
     public void create(Deal deal) {
         String query = "INSERT INTO deal (customer, product, shop) VALUES (?, ?, ?)";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, deal.getCustomer().getId());
@@ -40,7 +47,7 @@ public class DealRepository {
     public Deal get(Customer customer) {
         String query = "SELECT * FROM deal WHERE customer=?";
         Deal deal = null;
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setLong(1, customer.getId());
@@ -57,43 +64,43 @@ public class DealRepository {
         }
         return deal;
     }
-
-    public void update(Deal deal) {
-        String query = "UPDATE deal SET customer=?, product=?, shop=? where id=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setLong(1, deal.getCustomer().getId());
-            statement.setObject(2, deal.getProduct().getArticle());
-            statement.setObject(3, deal.getShop().getId());
-            statement.setLong(4, deal.getId());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void delete(Deal deal) {
-        String query = "DELETE FROM deal where id=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setLong(1, deal.getId());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    public void update(Deal deal) {
+//        String query = "UPDATE deal SET customer=?, product=?, shop=? where id=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setLong(1, deal.getCustomer().getId());
+//            statement.setObject(2, deal.getProduct().getArticle());
+//            statement.setObject(3, deal.getShop().getId());
+//            statement.setLong(4, deal.getId());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void delete(Deal deal) {
+//        String query = "DELETE FROM deal where id=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setLong(1, deal.getId());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public List<Deal> getAllDeals() {
         String query = "SELECT * FROM deal";
         List<Deal> deals = new ArrayList<>();
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              Statement statement = connection.createStatement()) {
 
             ResultSet resultSet = statement.executeQuery(query);

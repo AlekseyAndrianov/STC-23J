@@ -5,15 +5,30 @@ import part1.lesson15.task01.domain.Customer;
 import part1.lesson15.task01.domain.Product;
 import part1.lesson15.task01.domain.Shop;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Savepoint;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 @Log4j2
 public class Utils {
+
+    private static CustomerRepository customerRepository;
+    private static ConnectionFactory connectionFactory;
+    private static ShopRepository shopRepository;
+    private static ProductRepository productRepository;
+
+
+    public static void initUtils(ConnectionFactory connFactory, CustomerRepository customerRep, ShopRepository shopRep, ProductRepository productRep){
+        connectionFactory = connFactory;
+        customerRepository = customerRep;
+        shopRepository = shopRep;
+        productRepository = productRep;
+
+    }
 
     private static final String createCustomerTable = "CREATE TABLE customer (" +
             "id serial, " +
@@ -45,11 +60,10 @@ public class Utils {
             ");";
 
 
-
     public static void renewDB() {
         String dropTable = "DROP TABLE IF EXISTS %s;";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             statement.execute(String.format(dropTable, "customer"));
@@ -111,10 +125,8 @@ public class Utils {
                 .lName("Андрианов")
                 .build();
 
-        CustomerRepository customerRepository = new CustomerRepository();
         customerRepository.create(customer);
         log.debug("Create customer, put to db");
-        ShopRepository shopRepository = new ShopRepository();
         shopRepository.create(shop);
         log.debug("Create shop, put to db");
 
@@ -128,7 +140,7 @@ public class Utils {
                     .build();
             products.add(product);
         }
-        ProductRepository productRepository = new ProductRepository();
+
         productRepository.createAll(products);
         log.debug("Create products, put to db");
     }

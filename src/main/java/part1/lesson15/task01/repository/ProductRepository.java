@@ -12,12 +12,18 @@ import java.util.UUID;
 
 public class ProductRepository {
 
-    private final ShopRepository shopRepository = new ShopRepository();
+    private ShopRepository shopRepository;
+    private ConnectionFactory connectionFactory;
+
+    public ProductRepository(ShopRepository shopRepository, ConnectionFactory connectionFactory) {
+        this.shopRepository = shopRepository;
+        this.connectionFactory = connectionFactory;
+    }
 
     public void create(Product product) {
         String query = "INSERT INTO product (article, price, type, shop) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, product.getArticle());
@@ -34,7 +40,7 @@ public class ProductRepository {
     public void createAll(List<Product> products) {
         String query = "INSERT INTO product (article, price, type, shop) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             for (Product product : products) {
@@ -56,7 +62,7 @@ public class ProductRepository {
         String query = "SELECT * FROM product WHERE article=?";
 
         Product product = null;
-        try (Connection connection = ConnectionFactory.getConnection();
+        try (Connection connection = connectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, article);
@@ -73,51 +79,51 @@ public class ProductRepository {
         }
         return product;
     }
-
-    public void update(Product product) {
-        String query = "UPDATE product SET price=?, type=? where article=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setDouble(1, product.getPrice());
-            statement.setString(2, product.getType());
-            statement.setObject(3, product.getArticle());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void update(Product product, Shop shop) {
-        String query = "UPDATE product SET price=?, type=?, shop=? where article=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setDouble(1, product.getPrice());
-            statement.setString(2, product.getType());
-            statement.setObject(3, shop.getId());
-            statement.setObject(4, product.getArticle());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void delete(Product product) {
-        String query = "DELETE FROM product where article=?";
-
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setObject(1, product.getArticle());
-            statement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    public void update(Product product) {
+//        String query = "UPDATE product SET price=?, type=? where article=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setDouble(1, product.getPrice());
+//            statement.setString(2, product.getType());
+//            statement.setObject(3, product.getArticle());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void update(Product product, Shop shop) {
+//        String query = "UPDATE product SET price=?, type=?, shop=? where article=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setDouble(1, product.getPrice());
+//            statement.setString(2, product.getType());
+//            statement.setObject(3, shop.getId());
+//            statement.setObject(4, product.getArticle());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void delete(Product product) {
+//        String query = "DELETE FROM product where article=?";
+//
+//        try (Connection connection = connectionFactory.getConnection();
+//             PreparedStatement statement = connection.prepareStatement(query)) {
+//
+//            statement.setObject(1, product.getArticle());
+//            statement.execute();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

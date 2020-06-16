@@ -3,13 +3,17 @@ package part1.lesson15.task01.service;
 import part1.lesson15.task01.domain.Customer;
 import part1.lesson15.task01.domain.Deal;
 import part1.lesson15.task01.domain.Product;
-import part1.lesson15.task01.repository.DealRepository;
+import part1.lesson15.task01.repository.*;
 
 import java.util.List;
 
 public class ShopService {
 
-    private final DealRepository dealRepository = new DealRepository();
+    private DealRepository dealRepository;
+
+    public ShopService(DealRepository dealRepository) {
+        this.dealRepository = dealRepository;
+    }
 
     public void makeDeal(Product product, Customer customer) {
         Deal deal = Deal.builder()
