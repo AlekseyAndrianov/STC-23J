@@ -2,6 +2,10 @@ package part1.lesson08.task01.service;
 
 import part1.lesson08.task01.entities.SomeObject;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,25 +13,30 @@ import java.util.Map;
 public class ObjectDeSerializer {
 
 
-    public Object executeDeSerializing(String objectAsString) throws ClassNotFoundException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+    public Object executeDeSerializing(String file) throws NoSuchFieldException, InstantiationException, IllegalAccessException {
+
+        String objectAsString = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+
+            objectAsString = reader.readLine();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Object o = deSerialize(objectAsString, SomeObject.class);
         SomeObject someObject = (SomeObject) o;
-        System.out.println("someObject: " + someObject);
+        System.out.println("DeSerialized: " + someObject);
         return someObject;
     }
 
     // При вызове нужно передать строку соответствующую объекту
-    public Object deSerialize(String objectAsString, Class<?> someObjectClass) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchFieldException {
-        System.out.println("objectAsString: " + objectAsString);
-// Разбиваем объект на поля
+    public Object deSerialize(String objectAsString, Class<?> someObjectClass) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
         Map<String, String> objectFields = getObjectPairs(objectAsString);
-        objectFields.entrySet().forEach(System.out::println);
 
-        // Создаем объект класса
         Object o = someObjectClass.newInstance();
         for (Map.Entry<String, String> entry : objectFields.entrySet()) {
-
-
             Field field = o.getClass().getDeclaredField(entry.getKey());
             field.setAccessible(true);
             Class<?> cl = field.getType();
@@ -56,47 +65,9 @@ public class ObjectDeSerializer {
 
             } else field.set(o, field.getType().cast(deSerialize(entry.getValue(), field.getType())));
         }
-
-
-//        String className = pairs[0].split(":")[0];
-//        Class<?> clazz = Class.forName(className);
-//        for (int i = 1; i < pairs.length; i++) {
-//            String[] pair = getObjectPairs(pairs[i]);
-//            if (pair.length < 3)
-//                break;
-//            String value = pair[2];
-//            String objToCast = getObjectFromString(value).toString();
-//             else {
-//                Class<?> cl = field.getType();
-//
-//                else {
-//                    field.set(o, field.getType().cast(deSerialize(objToCast, SomeObject.class)));
-//                }
-//            }
-//            if (pairs[i].contains("{"))
-//                break;
-//        }
-
-
-//        try (FileInputStream fileInputStream = new FileInputStream(file);
-//             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-//
-//            object = objectInputStream.readObject();
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
         return o;
     }
 
-    private Object getObjectFromString(String value) {
-        return null;
-    }
 
     private Map<String, String> getObjectPairs(String objectAsString) {
         Map<String, String> map = new LinkedHashMap<>();

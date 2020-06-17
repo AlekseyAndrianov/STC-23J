@@ -19,7 +19,7 @@ import part1.lesson08.task01.service.ObjectSerializer;
 public class Main {
     private static final String file = "C:\\Users\\Admin\\Desktop\\destination.txt";
 
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, NoSuchFieldException, ClassNotFoundException {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, NoSuchFieldException {
         AnotherPojoObject anotherPojoObject = AnotherPojoObject.builder()
                 .id(1L)
                 .length(123.0)
@@ -37,14 +37,10 @@ public class Main {
                 .build();
 
         ObjectSerializer objectSerializer = new ObjectSerializer();
-        String serializing = objectSerializer.serialize(someObject, file);
+        objectSerializer.serialize(someObject, file);
 
         ObjectDeSerializer objectDeSerializer = new ObjectDeSerializer();
-        objectDeSerializer.executeDeSerializing(serializing);
-//        System.out.println("someObject: " + someObject);
-//
-//        SomeObject deSerializedObject = (SomeObject) objectSerializer.deSerialize(file);
-//        System.out.println("deSerializedObject: " + deSerializedObject);
+        objectDeSerializer.executeDeSerializing(file);
     }
 
 }

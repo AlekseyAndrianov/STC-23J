@@ -2,6 +2,9 @@ package part1.lesson08.task01.service;
 
 import part1.lesson08.task01.entities.SomeObject;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,30 +18,22 @@ import java.util.List;
  */
 public class ObjectSerializer {
 
-    private static int countObjects;
-    private static List<String> tree = new ArrayList<>();
-
-    public String serialize(Object object, String file) throws IllegalAccessException {
+    public void serialize(Object object, String file) throws IllegalAccessException {
 
         String objectAsString = objectToString(object);
         System.out.println("Serialized: " + objectAsString);
-        return objectAsString;
-//        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
-//             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-//
-//            objectOutputStream.writeObject(object);
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
 
+            writer.write(objectAsString);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getValue(Object object, Field field) throws IllegalAccessException {
         field.setAccessible(true);
-        Class type = field.getType();
+        Class<?> type = field.getType();
         if (type.isPrimitive() || type.equals(String.class)) {
             return field.get(object).toString();
         }
